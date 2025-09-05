@@ -5179,27 +5179,109 @@ if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_c
         });
     </script>
     <script type="text/javascript">
-		// Create chatbot button with logo
-		var btn = document.createElement("img");
-		btn.src = "https://chatcdn.npfs.co/static/backend/img/niaa.png"; // replace with your logo URL
-		btn.alt = "Chatbot";
-		btn.style.cssText = `
-			position:fixed;
-			right:24px;
-			bottom:24px;
-			width:56px;
-			height:56px;
-			border-radius:50%;
-			background:#fff;
-			cursor:pointer;
-			box-shadow:0 6px 12px rgba(0,0,0,0.2);
-			z-index:9999;
-		`;
-		btn.onclick = function() {
-			window.open("https://app--kct-admit-bot-125364da.base44.app", "_blank");
-		};
-		document.body.appendChild(btn);
-	</script>
+  // Create chatbot button with logo
+  var btn = document.createElement("img");
+  btn.src = "https://chatcdn.npfs.co/static/backend/img/niaa.png"; // replace with your logo URL
+  btn.alt = "Chatbot";
+  btn.style.cssText = `
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:#fff;
+    cursor:pointer;
+    box-shadow:0 6px 12px rgba(0,0,0,0.2);
+    z-index:9999;
+  `;
+
+  // Create chatbot iframe (hidden by default)
+  var iframe = document.createElement("iframe");
+  iframe.src = "https://app--kct-admit-bot-125364da.base44.app"; // your chatbot app
+  iframe.allow = "clipboard-read; clipboard-write; microphone; camera;"; // allow extra permissions if needed
+  iframe.style.cssText = `
+    position:fixed;
+    bottom:80px;
+    right:20px;
+    width:400px;
+    height:600px;
+    max-height:80vh;
+    border:0;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.3);
+    z-index:9998;
+    display:none;
+    background:#fff;
+  `;
+
+  // Create close button for the iframe
+  var closeBtn = document.createElement("button");
+  closeBtn.innerHTML = "✖";
+  closeBtn.style.cssText = `
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:red;
+    color:white;
+    border:none;
+    border-radius:50%;
+    width:28px;
+    height:28px;
+    font-size:16px;
+    cursor:pointer;
+    z-index:10000;
+    display:none;
+  `;
+
+  // Mobile style (fullscreen)
+  function adjustIframeSize() {
+    if (window.innerWidth <= 768) {
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+      iframe.style.bottom = "0";
+      iframe.style.right = "0";
+      iframe.style.borderRadius = "0";
+    } else {
+      iframe.style.width = "400px";
+      iframe.style.height = "600px";
+      iframe.style.bottom = "80px";
+      iframe.style.right = "20px";
+      iframe.style.borderRadius = "12px";
+    }
+  }
+  window.addEventListener("resize", adjustIframeSize);
+
+  // Toggle chatbot on button click
+  btn.onclick = function() {
+    if (iframe.style.display === "none") {
+      adjustIframeSize();
+      iframe.style.display = "block";
+      closeBtn.style.display = "block";
+    } else {
+      iframe.style.display = "none";
+      closeBtn.style.display = "none";
+    }
+  };
+
+  // Close button handler
+  closeBtn.onclick = function() {
+    iframe.style.display = "none";
+    closeBtn.style.display = "none";
+  };
+
+  // Handle links inside iframe that refuse to load (like Google login)
+  window.addEventListener("message", function(event) {
+    if (event.data && event.data.openInNewTab) {
+      window.open(event.data.openInNewTab, "_blank");
+    }
+  });
+
+  document.body.appendChild(btn);
+  document.body.appendChild(iframe);
+  document.body.appendChild(closeBtn);
+</script>
+
 
 </body>
 </html>
